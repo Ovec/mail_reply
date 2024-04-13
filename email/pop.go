@@ -1,4 +1,4 @@
-package pop
+package email
 
 import (
 	"fmt"

@@ -5,7 +5,6 @@ import (
 
 	"mailer/email"
 	"mailer/environment"
-	"mailer/pop"
 	"mailer/str"
 )
 
@@ -15,7 +14,7 @@ var lookFor = "atry"
 func main() {
 	if active {
 		config := environment.Get()
-		unparsedEmails := pop.GetEmails(config.Pop3)
+		unparsedEmails := email.GetEmails(config.Pop3)
 		emails := email.ParseMany(unparsedEmails)
 		emailId := str.FindString(emails, lookFor)
 
