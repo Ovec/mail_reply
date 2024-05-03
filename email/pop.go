@@ -13,7 +13,7 @@ import (
 
 var lastReadMessage int = 0
 
-func GetEmails(config environment.POP3Config) []*message.Entity {
+func GetEmails(config environment.ConnectionConfig) []*message.Entity {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -40,14 +40,14 @@ func GetEmails(config environment.POP3Config) []*message.Entity {
 	}
 
 	// Print the total number of messages and their size.
-	count, size, _ := c.Stat()
-	fmt.Println("total messages=", count, "size=", size)
+	count, _, _ := c.Stat()
+	// fmt.Println("total messages=", count, "size=", size)
 
-	// Pull the list of all message IDs and their sizes.
-	msgs, _ := c.List(0)
-	for _, m := range msgs {
-		fmt.Println("id=", m.ID, "size=", m.Size)
-	}
+	// // Pull the list of all message IDs and their sizes.
+	// msgs, _ := c.List(0)
+	// for _, m := range msgs {
+	// 	fmt.Println("id=", m.ID, "size=", m.Size)
+	// }
 
 	var messages []*message.Entity
 

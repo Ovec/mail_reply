@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"mailer/email"
 	"mailer/environment"
 	"mailer/str"
@@ -19,14 +17,14 @@ func main() {
 		emailId := str.FindString(emails, lookFor)
 
 		if emailId != -1 {
-			response := email.CreateResponse(emails[emailId])
+			response := email.CreateResponse(unparsedEmails[emailId], config)
+			email.SendMail(config.Smtp, response)
 
-			fmt.Println(response.Body)
 			// smtp.SendMail(response)
 			active = false
 		}
 
-		fmt.Println("Found in email n. ", emailId)
+		// fmt.Println("Found in email n. ", emailId)
 
 	}
 	// check if reply is active

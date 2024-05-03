@@ -8,15 +8,21 @@ import (
 )
 
 type Config struct {
-	Pop3 POP3Config
+	Pop3  ConnectionConfig
+	Smtp  ConnectionConfig
+	Email EmailConfig
 }
 
-type POP3Config struct {
+type ConnectionConfig struct {
 	Username   string
 	Password   string
 	Host       string
 	Port       int
 	TLSEnabled bool
+}
+
+type EmailConfig struct {
+	Sender string
 }
 
 func Get() Config {
@@ -37,7 +43,7 @@ func Get() Config {
 		panic("Error parsing POP3_PORT config value")
 	}
 
-	pop3config := POP3Config{
+	pop3config := ConnectionConfig{
 		Username:   os.Getenv("POP3_USERNAME"),
 		Password:   os.Getenv("POP3_PASSWORD"),
 		Host:       os.Getenv("POP3_HOST"),
@@ -45,7 +51,34 @@ func Get() Config {
 		TLSEnabled: pop3TLSEnabled,
 	}
 
+	smtpPort := os.Getenv("SMTP_PORT")
+	port, err = strconv.Atoi(smtpPort)
+	if err != nil {
+		panic("Error parsing SMTP_PORT config value")
+	}
+
+	smtpTLSEnabledStr := os.Getenv("POP3_TLS_ENABLED")
+	smtpTLSEnabled, err := strconv.ParseBool(smtpTLSEnabledStr)
+	if err != nil {
+		panic("Error parsing SMTP_TLS_ENABLED config value")
+	}
+
+	smtpConfig := ConnectionConfig{
+		Username:   os.Getenv("SMTP_USERNAME"),
+		Password:   os.Getenv("SMTP_PASSWORD"),
+		Host:       os.Getenv("SMTP_HOST"),
+		Port:       port,
+		TLSEnabled: smtpTLSEnabled,
+	}
+
+	emailSender := os.Getenv("EMAIL_SENDER")
+	if err != nil {
+		panic("Error parsing EMAIL_SENDER config value")
+	}
+
 	return Config{
-		Pop3: pop3config,
+		Pop3:  pop3config,
+		Smtp:  smtpConfig,
+		Email: EmailConfig{Sender: emailSender},
 	}
 }

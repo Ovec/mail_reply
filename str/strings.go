@@ -12,7 +12,7 @@ func FindString(emails []*email.Email, lookFor string) int {
 			return i
 		}
 
-		if strings.Contains(e.Subject, lookFor) {
+		if strings.Contains(e.Headers.Get("subject"), lookFor) {
 			return i
 		}
 	}
